@@ -4,6 +4,7 @@ import "../stylesheets/Products.css";
 import { useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
+import clearFilterimg from "../assests/images/clrfilter.png";
 
 const StarRating = ({ rating }) => {
   const stars = Array.from({ length: 5 }, (_, index) => (
@@ -24,6 +25,8 @@ const Products = () => {
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
+
+  const [activeCategory, setActiveCategory] = useState("All");
 
   const [showModal, setShowModal] = useState(false); // Added state for modal visibility
   const [selectedProduct, setSelectedProduct] = useState({}); // Added state for selected product
@@ -77,13 +80,49 @@ const Products = () => {
   }, [id]);
 
   const filterProduct = (cat) => {
-    const updateList = data.filter((x) => x.category === cat);
+    // const updateList = data.filter((x) => x.category === cat);
+    setFilter(data.filter((x) => (cat === "All" ? true : x.category === cat)));
+    setActiveCategory(cat);
 
-    setFilter(updateList);
+    // setFilter(updateList);
   };
 
+  const clearFilter = () => {
+    setFilter(data);
+    setActiveCategory("All");
+  };
+
+  // const addToCart = (product) => {
+  //   setCart([...cart, product]);
+  // };
+
   const addToCart = (product) => {
-    setCart([...cart, product]);
+    const existingItem = cart.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      const updatedCart = cart.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      setCart(updatedCart);
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+  };
+
+  const increaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) =>
+      item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    setCart(updatedCart);
+  };
+
+  const decreaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) =>
+      item.id === productId && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
+    setCart(updatedCart);
   };
 
   const removeFromCart = (productId) => {
@@ -107,33 +146,53 @@ const Products = () => {
       </div>
 
       <div className="buttons">
-        <button className="filter-button" onClick={() => setFilter(data)}>
-          All
-        </button>
-        <button
-          className="filter-button"
-          onClick={() => filterProduct("men's clothing")}
-        >
-          Men's Clothing
-        </button>
-        <button
-          className="filter-button"
-          onClick={() => filterProduct("women's clothing")}
-        >
-          Women's Clothing
-        </button>
-        <button
-          className="filter-button"
-          onClick={() => filterProduct("jewelery")}
-        >
-          Jewelery
-        </button>
-        <button
-          className="filter-button"
-          onClick={() => filterProduct("electronics")}
-        >
-          Electronic
-        </button>
+        <div className="category-filter-btn-wrap">
+          <button
+            className={`filter-button ${
+              activeCategory === "All" ? "active" : ""
+            }`}
+            onClick={() => setFilter(data)}
+          >
+            All
+          </button>
+          <button
+            className={`filter-button ${
+              activeCategory === "men's clothing" ? "active" : ""
+            }`}
+            onClick={() => filterProduct("men's clothing")}
+          >
+            Men's Clothing
+          </button>
+          <button
+            className={`filter-button ${
+              activeCategory === "women's clothing" ? "active" : ""
+            }`}
+            onClick={() => filterProduct("women's clothing")}
+          >
+            Women's Clothing
+          </button>
+          <button
+            className={`filter-button ${
+              activeCategory === "jewelery" ? "active" : ""
+            }`}
+            onClick={() => filterProduct("jewelery")}
+          >
+            Jewelery
+          </button>
+          <button
+            className={`filter-button ${
+              activeCategory === "electronics" ? "active" : ""
+            }`}
+            onClick={() => filterProduct("electronics")}
+          >
+            Electronic
+          </button>
+        </div>
+        <div className="clear-filter-wrap">
+          <button className="clear-filter-btn" onClick={clearFilter}>
+            <img src={clearFilterimg} className="clr-filter-img"></img>
+          </button>
+        </div>
       </div>
       <div className="row">
         {filter.map((product) => (
@@ -195,7 +254,29 @@ const Products = () => {
               <p>
                 <b>Price:</b> ${item.price}
               </p>
-              <p>Quantity: 1</p>
+
+              <div className="quantity-main-wrap">
+                <div className="quantity-count-wrap">
+                  <span>
+                    <b>Quantity:</b> {item.quantity}
+                  </span>
+                </div>
+                <div className="quantity-btn-wrap">
+                  <button
+                    onClick={() => increaseQuantity(item.id)}
+                    className="quantity-button"
+                  >
+                    +
+                  </button>
+
+                  <button
+                    onClick={() => decreaseQuantity(item.id)}
+                    className="quantity-button"
+                  >
+                    -
+                  </button>
+                </div>
+              </div>
               <button
                 onClick={() => removeFromCart(item.id)}
                 className="remover-item"

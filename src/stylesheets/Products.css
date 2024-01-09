@@ -9,6 +9,14 @@
   font-size: 20px;
 }
 
+.category-filter-btn-wrap {
+  /* border: 1px solid red; */
+  display: flex;
+  width: 100%;
+  
+}
+
+
 .filter-button {
   border: none;
   border-radius: 10px;
@@ -22,6 +30,39 @@
   color: #2874f0;
   background-color: #fff;
   border: 1px solid #2874f0;
+}
+
+/* Styles for the active state */
+.filter-button.active {
+  background-color: #2874f0;
+  border: 1px solid #2874f0;
+  color: #fff;
+}
+
+/* Styles for the inactive state */
+.filter-button:not(.active) {
+  background-color: #fff; /* Adjust the alpha value for a lighter shade */
+  border: 1px solid #2874f0;
+  color: #2874f0;
+}
+
+.clear-filter-wrap {
+  /* border: 1px solid; */
+}
+.clear-filter-btn {
+ outline: none;
+ border: none;
+ background-color: #FB641B;
+ color: #fff; 
+ height: 60px;
+ width: 60px;
+ border-radius: 50%;
+ padding: 10px;
+}
+
+.clr-filter-img {
+  height: 50px;
+  width: 50px;
 }
 .but-now {
   border: none;
@@ -39,6 +80,7 @@
   border: 1px solid #2874f0;
   border-radius: 5px;
   padding: 5px;
+  margin: 10px;
 }
 
 .remover-item:hover {
@@ -69,6 +111,7 @@
 .cart-item {
   list-style: none;
   display: flex;
+  margin: 25px;
 }
 
 /* popup css */
@@ -142,3 +185,28 @@
   background-color: #2874f0;
   color: #fff;
 }
+
+
+/* quantity style */
+
+.quantity-main-wrap {
+  display: flex;
+  gap: 30px;
+  /* justify-content: space-between; */
+  align-items: center;
+  /* border: 1px solid; */
+}
+.quantity-btn-wrap {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+}
+.quantity-button{ 
+  border: none;
+  outline: none;
+  background-color: #2874f0;
+  color: #fff;
+  padding: 10px;
+  width: 50px;
+}
+
